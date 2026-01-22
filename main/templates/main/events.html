@@ -1,0 +1,29 @@
+{% extends "main/base.html" %}
+{% block content %}
+
+<h2>📅 School Events</h2>
+
+{% if user.role != "student" %}
+<form method="post" class="card">
+  {% csrf_token %}
+  <input type="text" name="title" placeholder="Event Title" required>
+  <textarea name="description" placeholder="Event details..." required></textarea>
+  <input type="date" name="event_date" required>
+  <button class="btn">Add Event</button>
+</form>
+{% endif %}
+
+<div class="event-grid">
+  {% for e in events %}
+  <div class="event-card fade">
+    <div class="event-date">
+      {{ e.event_date|date:"M d" }}
+    </div>
+    <h3>{{ e.title }}</h3>
+    <p>{{ e.description }}</p>
+    <small>Posted by {{ e.created_by.username }}</small>
+  </div>
+  {% endfor %}
+</div>
+
+{% endblock %}

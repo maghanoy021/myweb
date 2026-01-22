@@ -1,0 +1,35 @@
+{% extends 'main/base.html' %}
+{% block content %}
+
+{% if user.is_authenticated %}
+  <h2>Welcome, {{ user.username }}!</h2>
+  <p class="role"><strong>{{ user.role|title }}</strong></p>
+{% endif %}
+
+<div class="cards">
+  <div class="card">📢 Announcements: {{ announcements.count }}</div>
+  <div class="card">📅 Events: {{ events.count }}</div>
+  <div class="card">📂 Files: {{ user.files.count }}</div>
+  <div class="card">✉ Messages: {{ user.received_messages.count }}</div>
+</div>
+
+{% if user.is_authenticated %}
+  {% if user.role == "admin" %}
+    <div class="admin-panel fade" style="margin-top:20px;">
+      <h3>Admin Controls</h3>
+        <a href="{% url 'announcements' %}" class="btn">Post Announcement</a>
+        <a href="{% url 'events' %}" class="btn">Add Event</a>
+    </div>
+    {% else %}
+      <div class="welcome-box fade">
+        <h2>Welcome to CvSU CampusConnect Portal</h2>
+        <p>This is the official student & faculty portal of Cavite State University. Access announcements, events, files, and messages in one place.</p>
+        <div style="text-align:center; margin-top:20px;">
+            <button class="btn" onclick="openLogin()">Login</button>
+            <button class="btn" onclick="openRegister()">Register</button>
+         </div>
+        </div>
+    {% endif %}
+{% endif %}
+
+{% endblock %}

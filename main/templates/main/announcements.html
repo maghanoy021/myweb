@@ -1,0 +1,25 @@
+{% extends "main/base.html" %}
+{% block content %}
+
+<h2>📢 Announcements</h2>
+
+{% if user.role != "student" %}
+<form method="post" class="card">
+  {% csrf_token %}
+  <input type="text" name="title" placeholder="Title" required>
+  <textarea name="content" placeholder="Announcement details..." required></textarea>
+  <button class="btn">Post</button>
+</form>
+{% endif %}
+
+<div class="grid">
+  {% for a in posts %}
+  <div class="card fade">
+    <h3>{{ a.title }}</h3>
+    <small>By {{ a.created_by.username }} | {{ a.created_at|date:"M d, Y" }}</small>
+    <p>{{ a.content }}</p>
+  </div>
+  {% endfor %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'main/base.html' %}
+{% block content %}
+<h2>Messages</h2>
+<form method="post">{% csrf_token %}
+{{ form.as_p }}
+<button>Send Message</button>
+</form>
+
+<h3>Inbox</h3>
+<ul>
+{% for msg in inbox %}
+<li>From {{ msg.sender.username }}: {{ msg.content }} ({{ msg.sent_at }})</li>
+{% empty %}<li>No messages.</li>{% endfor %}
+</ul>
+
+<h3>Sent</h3>
+<ul>
+{% for msg in sent %}
+<li>To {{ msg.receiver.username }}: {{ msg.content }} ({{ msg.sent_at }})</li>
+{% empty %}<li>No sent messages.</li>{% endfor %}
+</ul>
+{% endblock %}

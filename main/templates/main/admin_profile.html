@@ -1,0 +1,22 @@
+{% extends "main/base.html" %}
+{% block content %}
+
+<h2>Admin Dashboard</h2>
+<p class="role">System Administrator</p>
+
+<div class="cards">
+  <div class="card">👥 {{ total_users }} Users</div>
+  <div class="card">📢 {{ total_announcements }} Announcements</div>
+  <div class="card">📅 {{ total_events }} Events</div>
+  <div class="card">📂 {{ total_files }} Files</div>
+  <div class="card">✉ {{ total_messages }} Messages</div>
+</div>
+
+<div class="admin-panel fade">
+  <h3>Quick Actions</h3>
+  <a href="{% url 'announcements' %}" class="btn">Manage Announcements</a>
+  <a href="{% url 'events' %}" class="btn">Manage Events</a>
+  <a href="{% url 'files' %}" class="btn">Manage Files</a>
+</div>
+
+{% endblock %}

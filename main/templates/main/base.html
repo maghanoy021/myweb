@@ -1,0 +1,133 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CvSU CampusConnect Portal</title>
+<link rel="stylesheet" href="{% static 'main/style.css' %}">
+<link rel="icon" href="{% static 'main/images/cvsu_logo.png' %}" type="image/x-icon">
+</head>
+<body>
+
+<header class="header">
+  <div class="header-content">
+    <div class="left">
+      <img src="{% static 'main/images/cvsu_logo.png' %}" alt="Logo" class="logo-img">
+      <div class="title">
+        <h1>CvSU CampusConnect</h1>
+        <p>Student & Faculty Portal</p>
+      </div>
+    </div>
+
+    <div class="right">
+      <button class="menu-btn" onclick="toggleMenu()">☰</button>
+
+      {% if user.is_authenticated %}
+      <!-- Profile Menu -->
+      <div class="profile" onclick="toggleProfile()">
+        👤 {{ user.username }}
+        <div class="profile-menu" id="profileMenu">
+          <a href="{% url 'profile' %}">My Profile</a>
+          <a href="{% url 'logout' %}">Logout</a>
+        </div>
+      </div>
+      {% else %}
+      <!-- Login / Register Buttons -->
+      <button class="btn" onclick="openModal('loginModal')">Login</button>
+      <button class="btn" onclick="openModal('registerModal')">Register</button>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Mobile Navigation -->
+  <nav id="mobileNav" class="mobile-nav">
+    <a href="{% url 'dashboard' %}">Dashboard</a>
+    <a href="{% url 'announcements' %}">Announcements</a>
+    <a href="{% url 'events' %}">Events</a>
+    <a href="{% url 'files' %}">Files</a>
+    <a href="{% url 'messages' %}">Messages</a>
+  </nav>
+</header>
+
+<div class="container">
+  {% block content %}{% endblock %}
+</div>
+
+<!-- =========================
+     LOGIN MODAL
+============================ -->
+<div id="loginModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('loginModal')">&times;</span>
+    <h2>Login</h2>
+    <form method="post" action="{% url 'login' %}">
+      {% csrf_token %}
+      <input type="text" name="username" placeholder="Username" required>
+      <input type="password" name="password" placeholder="Password" required>
+      <button class="btn">Login</button>
+    </form>
+    <p>Don't have an account? <a href="#" onclick="switchModal('loginModal','registerModal')">Register</a></p>
+  </div>
+</div>
+
+<!-- =========================
+     REGISTER MODAL
+============================ -->
+<div id="registerModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('registerModal')">&times;</span>
+    <h2>Register</h2>
+    <form method="post" action="{% url 'register' %}">
+      {% csrf_token %}
+      <input type="text" name="username" placeholder="Username" required>
+      <input type="email" name="email" placeholder="Email" required>
+      <input type="password" name="password1" placeholder="Password" required>
+      <input type="password" name="password2" placeholder="Confirm Password" required>
+      <select name="role" required style="text-align: left;">
+        <option value="">Select Role</option>
+        <option value="student">Admin</option>
+        <option value="student">Student</option>
+        <option value="instructor">Instructor</option>
+      </select>
+      <button class="btn">Register</button>
+    </form>
+    <p>Already have an account? <a href="#" onclick="switchModal('registerModal','loginModal')">Login</a></p>
+  </div>
+</div>
+
+<script>
+  /* =========================
+     TOGGLE MENU / PROFILE
+  ============================ */
+  function toggleMenu() {
+    document.getElementById("mobileNav").classList.toggle("show");
+  }
+  function toggleProfile() {
+    document.getElementById("profileMenu").classList.toggle("show");
+  }
+
+  /* =========================
+     MODAL CONTROLS
+  ============================ */
+  function openModal(id) {
+    document.getElementById(id).style.display = "flex";
+  }
+  function closeModal(id) {
+    document.getElementById(id).style.display = "none";
+  }
+  function switchModal(hideId, showId) {
+    closeModal(hideId);
+    openModal(showId);
+  }
+
+  /* CLOSE MODAL ON OUTSIDE CLICK */
+  window.onclick = function(e) {
+    if(e.target.classList.contains('modal')) {
+      e.target.style.display = "none";
+    }
+  }
+</script>
+
+</body>
+</html>
